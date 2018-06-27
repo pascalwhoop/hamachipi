@@ -2,12 +2,14 @@
 start_daemon(){
   /opt/logmein-hamachi/hamachid -c /config
   while [ 1 ]; do
+    echo "start loop"
     out=$(hamachi)
     [[ $out =~ *version* ]] && sleep 1 || break
   done
 }
 
 check_login(){
+  echo "check login"
   IFS=$'\n';
   regex_status="status.*?: (.*?)"
   regex_account="lmi account:(.*?)"
@@ -29,6 +31,7 @@ check_login(){
 }
 
 check_account(){
+  echo "check user"
   IFS=$'\n';
   regex_status="status.*?: (.*?)"
   regex_account="lmi account: (.*)"
@@ -40,12 +43,13 @@ check_account(){
     fi
   done
 }
-
+echo "starting hamachi"
 start_daemon
 check_login
 check_account
 
 while pgrep hamachid >/dev/null; do
+  echo "waiting"
   sleep 10
 done
 
